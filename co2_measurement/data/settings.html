@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>CO2-Measurement</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+		<style>
+			html {
+				font-family: Helvetica;
+				display: inline-block;
+				margin: 0px auto;
+				text-align: center;
+			}
+			body {
+				margin-top: 0px;
+				margin-left: 0px;
+				margin-right: 0px;
+			}
+			h1 { 
+				color: #444444;
+				margin: 50px auto 30px;
+			}
+			h3 {
+				color: #444444;
+				margin-bottom: 50px;
+			}
+			p {
+				font-size: 14px;
+				color: #888;
+				margin-bottom: 10px;
+			}
+			ul {
+				list-style-type: none;
+				margin: 0;
+				padding: 0;
+				overflow: hidden;
+				background-color: #333;
+			}
+			li {
+				float: left;
+			}
+			li a {
+				display: block;
+				color: white;
+				text-align: center;
+				padding: 14px 16px;
+				text-decoration: none;
+			}
+			li a:hover:not(.active) {
+				background-color: #111;
+			}
+			.active {
+				background-color: #4CAF50;
+			}
+			table, th, td {
+				margin-left: auto;
+				margin-right: auto;
+				margin-bottom: 20px;
+			}
+			button {
+				margin-bottom: 20px;
+			}
+		</style>
+	</head>
+	<body>
+		<ul>
+			<li><a href="/data.html">Data</a></li>
+			<li><a class="active">Settings</a></li>
+			<li><a href="/data.xml">XML</a></li>
+		</ul>
+
+		<h1>Settings</h1>
+
+		<table id="wlanTable">
+			<tr>
+				<td>#</td>
+				<td>SSID</td>
+				<td>RSSI</td>
+				<td>open</td>
+			</tr>
+		</table>
+		<button type="button" onclick="scanWlan()">scan wlan</button>
+
+		<form action="/new-wlan" method="get"">
+			<label for="inputSsid">SSID</label><br>
+			<input id="inputSsid" type="text" name="inputSsid"></input><br>
+			<label for="inputPassword">password</label><br>
+			<input id="inputPassword" type="password" name="inputPassword"></input><br><br>
+			<input type="submit" value="Submit">
+		</form>
+	</body>
+	<script>
+		function scanWlan() {
+			var table = document.getElementById("wlanTable");
+			var tableLength = table.rows.length;
+			for(i = 1; i < tableLength; i++) {
+				table.deleteRow(1);
+			}
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					var json = JSON.parse(this.responseText);
+					for(i = 0; i < json.ssid.length; i++) {
+						var row = table.insertRow(i+1);
+						var cellNr = row.insertCell(0);
+						var cellSsid = row.insertCell(1);
+						var cellRssi = row.insertCell(2);
+						var cellOpen = row.insertCell(3);
+						cellNr.innerHTML = i;
+						cellSsid.innerHTML = json.ssid[i];
+						cellRssi.innerHTML = json.rssi[i];
+						cellOpen.innerHTML = json.open[i];
+					}
+				}
+			};
+			xhttp.open("GET", "/wlan-scan", true);
+			xhttp.send();
+		}
+	</script>
+</html>
