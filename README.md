@@ -1,4 +1,4 @@
-# co2MeasurementDevice
+# CO2 Measurement Device
 An ESP 8266 microcontroller with a CO2 sensor measure the indoor air quality and remind to ventilate the room.
 # Caution:
 <b>This device provides support for indoor ventilation. It measures co2. It cannot detect coronavirus. A corona infection cannot be prevented with this device!</b>
@@ -29,3 +29,6 @@ The measured values can be accessed over a standalone WiFi from the ESP8266, cal
 In home-WiFi-mode the ESP8266 can be accesses over the local ip-address assigned by your home-router.
 
 It is also possible to use the co2-sensor in your smarthome. For that the values are provided as xml-file.
+
+# Releases:
+version 3.2: https://github.com/fgoe12/co2MeasurementDevice/releases/tag/v3.2
