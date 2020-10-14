@@ -1,7 +1,7 @@
 # co2MeasurementDevice
 An ESP 8266 microcontroller with a CO2 sensor measure the indoor air quality and remind to ventilate the room.
 # Caution:
-This device provides support for indoor ventilation. It measures co2. It cannot detect coronavirus. A corona infection cannot be prevented with this device!
+<b>This device provides support for indoor ventilation. It measures co2. It cannot detect coronavirus. A corona infection cannot be prevented with this device!</b>
 # Idea:
 The idea was to develop an indicator for the risk of infection with the coronavirus through aerosols. To determine the amount of aerosol in the air we decided to detect the amount of co2 in the air.
 When breathing out CO2 is emitted. Over a longer period of time with several people in one room, the amount of CO2 in the room therefore increases.
