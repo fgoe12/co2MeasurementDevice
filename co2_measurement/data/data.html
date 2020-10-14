@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>CO2-Measurement</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+		<meta http-equiv="refresh" content="15">
+		<style>
+			html {
+				font-family: Helvetica;
+				display: inline-block;
+				margin: 0px auto;
+				text-align: center;
+			}
+			body {
+				margin-top: 0px;
+				margin-left: 0px;
+				margin-right: 0px;
+			}
+			h1 { 
+				color: #444444;
+				margin: 50px auto 30px;
+			}
+			h3 {
+				color: #444444;
+				margin-bottom: 50px;
+			}
+			p {
+				font-size: 14px;
+				color: #888;
+				margin-bottom: 10px;
+			}
+			ul {
+				list-style-type: none;
+				margin: 0;
+				padding: 0;
+				overflow: hidden;
+				background-color: #333;
+			}
+			li {
+				float: left;
+			}
+			li a {
+				display: block;
+				color: white;
+				text-align: center;
+				padding: 14px 16px;
+				text-decoration: none;
+			}
+			li a:hover:not(.active) {
+				background-color: #111;
+			}
+			.active {
+				background-color: #4CAF50;
+			}
+		</style>
+	</head>
+	<body>
+		<ul>
+			<li><a class="active">Data</a></li>
+			<li><a href="/settings.html">Settings</a></li>
+			<li><a href="/data.xml">XML</a></li>
+		</ul>
+
+		<h1>CO2-Measurement</h1>
+		<p>%TIMEHEADING%</p>
+		<h3>%TIMESTR%</h3>
+		<p>CO2 / ppm</p>
+		<h3>%CO2PPMLASTMEASUREMENT%</h3>
+		<p>CO2 mean / ppm</p>
+		<h3>%CO2PPMMEAN%</h3>
+		<p>air quality</p>
+		<h3>%AIRQUALITY%</h3>
+	</body>
+</html>
