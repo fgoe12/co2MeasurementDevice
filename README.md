@@ -19,7 +19,7 @@ The measured co2 value should be easily communicated to everyone and a simple re
 </ul>
 
 # Schematics:
-<img src="pic_trulli.jpg" alt="schematics">
+<img src="co2_measurement_schematics.png" alt="schematics">
 
 # Implementation:
 For the easy access we decides to build an IoT-device with an ESP8266. The measured values can be accessed by the everyone with his own smartphone. As reminder to ventilate the room, we use a piezo buzzer alarm sensor, which makes a beep sound when a certain co2-level is reached. An LED also indicates the Co2 levels.
