@@ -9,11 +9,14 @@ When breathing out CO2 is emitted. Over a longer period of time with several peo
 If there is an infectious person in the room, the amount of aerosols containing the coronavirus will also increase.
 The measured co2 value should be easily communicated to everyone and a simple reminder to ventilate the room should be provided to improve the air quality.
 # Components:
-- 1x ESP8266 Node-MCU V3
-- 1x LED red yellow
-- 2x resistor for the LED (ex. 82 ohm)
-- 1x MH-Z19B CO2-Sensor
-- 1x Piezo Buzzer Alarm Sensor
+<ul>
+  <li>1x ESP8266 Node-MCU V3</li>
+  <li>1x ESP8266 Node-MCU V3</li>
+  <li>1x LED red yellow</li>
+  <li>2x resistor for the LED (ex. 68 ohm)</li>
+  <li>1x MH-Z19B CO2-Sensor</li>
+  <li>1x Piezo Buzzer Alarm Sensor</li>
+</ul>
 # Schematics:
 
 # Implementation:
