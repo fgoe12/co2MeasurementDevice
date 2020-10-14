@@ -32,3 +32,13 @@ It is also possible to use the co2-sensor in your smarthome. For that the values
 
 # Releases:
 <a id="downloadVersion3.2" href="https://github.com/fgoe12/co2MeasurementDevice/archive/v3.2.zip">Download release version 3.2</a>
+
+# How to:
+<ol>
+  <li>Download and install <a href="https://www.arduino.cc/en/Main/software">Arduino IDE.</a></li>
+  <li>Download latest release version of co2MeasurementDevice.</li>
+  <li>Open .ino file of downloaded co2MeasurementDevice version in Arduino IDE.</li>
+  <li>Flash .ino file to your ESP8266.</li>
+  <li>Upload files in data directory with the ESP8266 Sketch Data Upload button.</li>
+</ol>
+
