@@ -459,8 +459,8 @@ int readCo2SensorPwm() {
 	Serial.println("measurement started...");
 
 	do {
-		//duration of pwm-pulse from co2-sensor in ms (timeout 1004000µs)
-		durationPwmPulse = pulseIn(pinCo2Sensor, HIGH, 1004000) / 1000;
+		//duration of pwm-pulse from co2-sensor in ms (timeout 2500000µs = ~2.5x cycle-time, cycle-time = 1004ms)
+		durationPwmPulse = pulseIn(pinCo2Sensor, HIGH, 2500000) / 1000;
 		//pwm-pulse in percentage (%)
 		float durationPwmPulsePercentage = durationPwmPulse / 1004.0;
 		//calculate co2-ppm-value
