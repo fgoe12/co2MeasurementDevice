@@ -1,5 +1,5 @@
 # CO2 Measurement Device
-An ESP 8266 microcontroller with a CO2 sensor measure the indoor air quality and remind to ventilate the room. <a href="https://www.hackster.io/367592/co2-measuring-device-for-determining-air-quality-covid-19-1910ee">Full project description available on hackster.io</a> 
+An ESP 8266 microcontroller with a CO2 sensor measure the indoor air quality and remind to ventilate the room. Full project description available on <a href="https://www.hackster.io/367592/co2-measuring-device-for-determining-air-quality-covid-19-1910ee">hackster.io</a> 
 # Caution:
 <b>This device provides support for indoor ventilation. It measures co2. It cannot detect coronavirus. A corona infection cannot be prevented with this device!</b>
 # Idea:
