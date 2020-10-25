@@ -31,7 +31,7 @@ In home-WiFi-mode the ESP8266 can be accesses over the local ip-address assigned
 It is also possible to use the co2-sensor in your smarthome. For that the values are provided as xml-file.
 
 # Releases:
-<a id="downloadVersion3.2" href="https://github.com/fgoe12/co2MeasurementDevice/archive/v3.2.zip">Download release version 3.2</a>
+<a href="https://github.com/fgoe12/co2MeasurementDevice/archive/v3.3.zip">Download release version 3.3</a>
 
 # How to:
 <ol>
