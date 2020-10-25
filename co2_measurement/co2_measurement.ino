@@ -283,7 +283,7 @@ void writeStringToEeprom(String str, unsigned int address, unsigned int size) {
 	if(str.length() > size) {
 		Serial.println("EEPROM error: string-size bigger then flash-storage.");
 	} else {
-		Serial.println("EEPROM: " + str);
+		//Serial.println("EEPROM: " + str);
 		EEPROM.write(address,str.length());
 		for(unsigned int i = 0; i < str.length(); i++) {
 			char c = str[i];
