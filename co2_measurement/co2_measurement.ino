@@ -1,7 +1,7 @@
 /*
 author: Felix Göhner, Tim Göhner
-version: 3.2
-date: 14.10.2020
+version: 3.3
+date: 25.10.2020
 license: GNU
 
 schematics: D1 => piezo buzzer alarm sensor
@@ -141,8 +141,8 @@ void setup() {
 	Serial.print(ssidHomeWlan);
 
 	//for testing standalone wlan
-	//const char* ssidHomeWlan = "test";
-	//const char* passwordHomeWlan = "test";
+	const char* ssidHomeWlan = "test";
+	const char* passwordHomeWlan = "test";
 
 	WiFi.begin(ssidHomeWlan,passwordHomeWlan);
 
@@ -310,16 +310,30 @@ String readStringFromEeprom(unsigned int adress) {
 
 
 void setCo2Alarm(int value) {
-	
+
 	TDatetime datetime;
 	datetime = getDatetime();
+	boolean alarmStopped = false;
+
+	datetime.currentHour = 3;
+
+	if(wlanMode == HOMEWLAN) {
+		if(datetime.currentHour >= 10 && datetime.currentHour < 23) {
+			alarmStopped = false;
+		} else {
+			alarmStopped = true;
+			Serial.println("co2-alarm deactivated.");
+		}
+	}
+
+	//Serial.println(datetime.currentEpochTime - alarmsSetTime[0]);
 
 	if(value <= 800) {
 		Serial.println("air quality: green");
 		airQuality = "green";
 		digitalWrite(pinLedRed,LOW);
 		digitalWrite(pinLedYellow,LOW);
-		if((datetime.currentHour >= 10 || datetime.currentHour <= 22 ) && (co2ok == false)) {
+		if((alarmStopped == false) && (co2ok == false)) {
 			co2Alarm(0);
 			co2ok = true;
 		}
@@ -329,7 +343,7 @@ void setCo2Alarm(int value) {
 		digitalWrite(pinLedRed,LOW);
 		digitalWrite(pinLedYellow,HIGH);
 		co2ok = false;
-		if((datetime.currentEpochTime - alarmsSetTime[0] > 3600) && (datetime.currentHour >= 10 || datetime.currentHour <= 22 )) {
+		if((datetime.currentEpochTime - alarmsSetTime[0] > 3600) && (alarmStopped == false)) {
 			co2Alarm(1);
 			alarmsSetTime[0] = datetime.currentEpochTime;
 		}
@@ -339,7 +353,7 @@ void setCo2Alarm(int value) {
 		digitalWrite(pinLedRed,HIGH);
 		digitalWrite(pinLedYellow,LOW);
 		co2ok = false;
-		if((datetime.currentEpochTime - alarmsSetTime[1] > 3600) && (datetime.currentHour >= 10 || datetime.currentHour <= 22 )) {
+		if((datetime.currentEpochTime - alarmsSetTime[1] > 3600) && (alarmStopped == false)) {
 			co2Alarm(2);
 			alarmsSetTime[1] = datetime.currentEpochTime;
 		}
