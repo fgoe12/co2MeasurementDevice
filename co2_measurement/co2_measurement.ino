@@ -141,8 +141,8 @@ void setup() {
 	Serial.print(ssidHomeWlan);
 
 	//for testing standalone wlan
-	const char* ssidHomeWlan = "test";
-	const char* passwordHomeWlan = "test";
+	//const char* ssidHomeWlan = "test";
+	//const char* passwordHomeWlan = "test";
 
 	WiFi.begin(ssidHomeWlan,passwordHomeWlan);
 
@@ -314,8 +314,7 @@ void setCo2Alarm(int value) {
 	TDatetime datetime;
 	datetime = getDatetime();
 	boolean alarmStopped = false;
-
-	datetime.currentHour = 3;
+	unsigned long currentEpochTime = 0;
 
 	if(wlanMode == HOMEWLAN) {
 		if(datetime.currentHour >= 10 && datetime.currentHour < 23) {
@@ -324,9 +323,11 @@ void setCo2Alarm(int value) {
 			alarmStopped = true;
 			Serial.println("co2-alarm deactivated.");
 		}
+		currentEpochTime = datetime.currentEpochTime;
 	}
-
-	//Serial.println(datetime.currentEpochTime - alarmsSetTime[0]);
+	if(wlanMode == STANDALONEWLAN) {
+		currentEpochTime = (millis() / 1000) + 3601;
+	}
 
 	if(value <= 800) {
 		Serial.println("air quality: green");
@@ -343,9 +344,9 @@ void setCo2Alarm(int value) {
 		digitalWrite(pinLedRed,LOW);
 		digitalWrite(pinLedYellow,HIGH);
 		co2ok = false;
-		if((datetime.currentEpochTime - alarmsSetTime[0] > 3600) && (alarmStopped == false)) {
+		if((currentEpochTime - alarmsSetTime[0] > 3600) && (alarmStopped == false)) {
 			co2Alarm(1);
-			alarmsSetTime[0] = datetime.currentEpochTime;
+			alarmsSetTime[0] = currentEpochTime;
 		}
 	} else if(value >= 2000) {
 		Serial.println("air quality: red");
@@ -353,9 +354,9 @@ void setCo2Alarm(int value) {
 		digitalWrite(pinLedRed,HIGH);
 		digitalWrite(pinLedYellow,LOW);
 		co2ok = false;
-		if((datetime.currentEpochTime - alarmsSetTime[1] > 3600) && (alarmStopped == false)) {
+		if((currentEpochTime - alarmsSetTime[1] > 3600) && (alarmStopped == false)) {
 			co2Alarm(2);
-			alarmsSetTime[1] = datetime.currentEpochTime;
+			alarmsSetTime[1] = currentEpochTime;
 		}
 	}
 
