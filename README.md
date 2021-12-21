@@ -32,6 +32,7 @@ It is also possible to use the co2-sensor in your smarthome. For that the values
 
 # Releases:
 <a href="https://github.com/fgoe12/co2MeasurementDevice/archive/v4.0.zip">Download release version 4.0</a>
+<br>
 <a href="https://github.com/fgoe12/co2MeasurementDevice/archive/v3.3.zip">Download release version 3.3</a>
 
 # How to:
