@@ -1,7 +1,7 @@
 /*
 author: Felix Göhner, Tim Göhner
-version: 3.3
-date: 25.10.2020
+version: 4.0
+date: 12.21.2020
 license: GNU
 
 schematics: D1 => piezo buzzer alarm sensor
@@ -46,12 +46,12 @@ TWlanScanned wlanList;
 
 
 //eeprom
-unsigned int eeprom_size = 512;
+unsigned int eeprom_size = 512;	//max. size 512 bytes
 
 //home-wlan configuration
-const unsigned int ssidHomeWlanSize = 256;
+const unsigned int ssidHomeWlanSize = 254;	//254
 char ssidHomeWlan[ssidHomeWlanSize];
-const unsigned int passwordHomeWlanSize = 256;
+const unsigned int passwordHomeWlanSize = 254;	//254
 char passwordHomeWlan[passwordHomeWlanSize];
 
 //standalone-wlan configuration
@@ -111,6 +111,9 @@ unsigned long millisModemSleepStartUp = 0;
 boolean resetFlag = false;
 boolean wlanScanFlag = false;
 
+//hardware settings
+String alarmStoppedByBtnStr;
+
 
 void setup() {
 
@@ -129,13 +132,18 @@ void setup() {
 
 	//debugging ouput
 	Serial.begin(9600);
+	Serial.println("\nsetup started.");
+
+	//check hardware settings from eeprom
+	alarmStoppedByBtnStr = readStringFromEeprom(508);	//start address: 508
+	Serial.println("hardware-setting: alarm-sound " + alarmStoppedByBtnStr);
 
 	//try to connect to home-wlan
 	WiFi.mode(WIFI_STA);
 	wlanMode = HOMEWLAN;
 	String ssidHomeWlanStr = readStringFromEeprom(0);	//start address: 0
 	ssidHomeWlanStr.toCharArray(ssidHomeWlan,ssidHomeWlanSize);
-	String passwordHomeWlanStr = readStringFromEeprom(256);	//start address: 256
+	String passwordHomeWlanStr = readStringFromEeprom(254);	//start address: 254
 	passwordHomeWlanStr.toCharArray(passwordHomeWlan,passwordHomeWlanSize);
 	Serial.print("connecting to ");
 	Serial.print(ssidHomeWlan);
@@ -184,6 +192,9 @@ void setup() {
 		Serial.println(ssidStandaloneWlan);
 		WiFi.softAP(ssidStandaloneWlan, passwordStandaloneWlan,8);
 		WiFi.softAPConfig(local_ip, gateway, subnet);
+		//print the IP-address 10.10.10.1
+		Serial.println("use this URL to connect: ");
+		Serial.print("http://10.10.10.1/");
 	}
 
 	//webserver
@@ -195,6 +206,7 @@ void setup() {
 	server.on("/new-wlan.html", handleNewWlanPage);
 	server.on("/new-wlan", HTTP_GET, handleNewWlanAction);
 	server.on("/wlan-scan", HTTP_GET, handleWlanScanAction);
+	server.on("/set-settings", HTTP_GET, handleSettingsAction);	//only for hardware settings, not for setting a new wlan or scanning wlan
 
 	server.begin();
 	Serial.println("server started.");
@@ -289,7 +301,9 @@ void writeStringToEeprom(String str, unsigned int address, unsigned int size) {
 			char c = str[i];
 			EEPROM.write(address+i+1,c);
 			EEPROM.commit();
+			//Serial.print(c);
 		}
+		//Serial.print("\n");
 		Serial.println("EEPROM: String saved successfully.");
 	}
 
@@ -301,9 +315,11 @@ String readStringFromEeprom(unsigned int adress) {
 	
 	String str;
 	unsigned int strLength = EEPROM.read(adress);
+	//Serial.println(strLength);
 	for(unsigned int i = 0; i < strLength; i++) {
 		str += char(EEPROM.read(adress+i+1));
 	}
+	//Serial.println(str);
 	return str;
 
 }
@@ -317,16 +333,29 @@ void setCo2Alarm(int value) {
 	unsigned long currentEpochTime = 0;
 
 	if(wlanMode == HOMEWLAN) {
-		if(datetime.currentHour >= 10 && datetime.currentHour < 23) {
+		if(datetime.currentHour >= 10 && datetime.currentHour < 23 && alarmStoppedByBtnStr == "on") {
 			alarmStopped = false;
 		} else {
 			alarmStopped = true;
+			alarmsSetTime[0] = 0;
+			alarmsSetTime[1] = 0;
+			alarmsSetTime[2] = 0;
 			Serial.println("co2-alarm deactivated.");
 		}
 		currentEpochTime = datetime.currentEpochTime;
 	}
 	if(wlanMode == STANDALONEWLAN) {
 		currentEpochTime = (millis() / 1000) + 3601;
+		//check if alarm stopped by button over settings-page
+		if(alarmStoppedByBtnStr == "off") {
+			alarmStopped = true;
+			alarmsSetTime[0] = 0;
+			alarmsSetTime[1] = 0;
+			alarmsSetTime[2] = 0;
+			Serial.println("co2-alarm deactivated.");
+		} else if(alarmStoppedByBtnStr == "on"){
+			alarmStopped = false;
+		}
 	}
 
 	if(value <= 800) {
@@ -619,8 +648,8 @@ void handleNewWlanAction(AsyncWebServerRequest *request) {
 		inputPassword = request->getParam("inputPassword")->value();
     }
     //Serial.println(inputSsid + " " + inputPassword);
-	writeStringToEeprom(inputSsid,0,256);
-	writeStringToEeprom(inputPassword,256,256);
+	writeStringToEeprom(inputSsid,0,254);
+	writeStringToEeprom(inputPassword,254,254);
 	
 	delay(2000);
 
@@ -662,6 +691,32 @@ void handleWlanScanAction(AsyncWebServerRequest *request) {
 	request->send(response);
 	//request->send(200,"text/plain", String(doc));
 	//request->send(200,"text/plain", String(wlanList.ssid[0]));
+
+}
+
+
+//handle settings-action
+void handleSettingsAction(AsyncWebServerRequest *request) {
+
+	Serial.println("server: handleSettingsAction()");
+
+	String inputAlarmSound;
+
+    //GET ssid: /set-settings?inputAlarmSound=
+    if(request->hasParam("inputAlarmSound")) {
+		inputAlarmSound = request->getParam("inputAlarmSound")->value();
+		//write alarm sound status to EEPROM
+		writeStringToEeprom(inputAlarmSound,508,inputAlarmSound.length());
+		//delay(2000);
+		alarmStoppedByBtnStr = inputAlarmSound;
+		Serial.println("hardware-setting: alarm-sound " + inputAlarmSound);
+		//String str = readStringFromEeprom(508);
+		//Serial.println(str);
+	}
+	
+	//delay(2000);
+
+	request->redirect("/data.html");
 
 }
 

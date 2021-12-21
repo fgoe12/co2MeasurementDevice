@@ -24,9 +24,30 @@
 				margin-bottom: 50px;
 			}
 			p {
-				font-size: 14px;
+				font-size: 24px;
 				color: #888;
 				margin-bottom: 10px;
+			}
+			.informations {
+				font-size: 15px;
+				text-align: right;
+				color: #888;
+				margin-right: 10px;
+			}
+			.normalTextBig {
+				font-size: 18px;
+				text-align: center;
+				color: #000;
+			}
+			.normalTextSmall {
+				font-size: 16px;
+				text-align: center;
+				color: #000;
+			}
+			.heading {
+				font-size: 18px;
+				text-align: center;
+				color: #000;
 			}
 			ul {
 				list-style-type: none;
@@ -56,8 +77,37 @@
 				margin-right: auto;
 				margin-bottom: 20px;
 			}
-			button {
-				margin-bottom: 20px;
+			.button {
+				background-color: #4CAF50; /* Green */
+				border: none;
+				color: white;
+				padding: 15px 32px;
+				text-align: center;
+				text-decoration: none;
+				display: inline-block;
+				font-size: 16px;
+				transition-duration: 0.4s;
+				cursor: pointer;
+			}
+			.button:hover {
+				background-color: #357a38; /* DarkGreen */
+				color: white;
+			}
+			.buttonScanWlan {
+				margin-bottom: 10px;
+				padding: 12px 18px;
+				font-size: 13px;
+			}
+			.buttonSubmit {
+				
+			}
+			.freeSpaceDiffSettings {
+				margin-top: 100px;
+				margin-bottom: 100px;
+			}
+			.freeSpace {
+				margin-top: 30px;
+				margin-bottom: 30px;
 			}
 		</style>
 	</head>
@@ -67,25 +117,42 @@
 			<li><a class="active">Settings</a></li>
 			<li><a href="/data.xml">XML</a></li>
 		</ul>
-
+		<div class="informations">
+			<p class="informations">version: 4.0</p>
+		</div>
 		<h1>Settings</h1>
-
+		<h2>wifi settings</h2>
 		<table id="wlanTable">
 			<tr>
-				<td>#</td>
-				<td>SSID</td>
-				<td>RSSI</td>
-				<td>open</td>
+				<td class="heading">#</td>
+				<td class="heading">SSID</td>
+				<td class="heading">RSSI</td>
+				<td class="heading">open</td>
 			</tr>
 		</table>
-		<button type="button" onclick="scanWlan()">scan wlan</button>
+		<button class="button buttonScanWlan" type="button" onclick="scanWlan()">scan wlan</button>
+		<div class="freeSpace"></div>
 
 		<form action="/new-wlan" method="get"">
-			<label for="inputSsid">SSID</label><br>
+			<label for="inputSsid" class="normalTextBig">SSID</label><br>
 			<input id="inputSsid" type="text" name="inputSsid"></input><br>
-			<label for="inputPassword">password</label><br>
+			<label for="inputPassword" class="normalTextBig">password</label><br>
 			<input id="inputPassword" type="password" name="inputPassword"></input><br><br>
-			<input type="submit" value="Submit">
+			<input class="button buttonSubmit" type="submit" value="Submit">
+		</form>
+
+		<div class="freeSpaceDiffSettings"></div>
+
+		<form action="/set-settings" method="get"">
+			<h2>hardware settings</h2>
+			<p class="normalTextBig">alarm-sound</p>
+			<input type="radio" id="inputAlarmSoundOn" name="inputAlarmSound" value="on">
+			<label for="inputAlarmSoundOn" class="normalTextSmall">on</label><br>
+			<input type="radio" id="inputAlarmSoundOff" name="inputAlarmSound" value="off">
+			<label for="inputAlarmSoundOff" class="normalTextSmall">off</label><br>
+
+			<br>
+			<input class="button buttonSubmit" type="submit" value="Submit">
 		</form>
 	</body>
 	<script>
