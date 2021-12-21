@@ -135,7 +135,7 @@ void setup() {
 	Serial.println("\nsetup started.");
 
 	//check hardware settings from eeprom
-	alarmStoppedByBtnStr = readStringFromEeprom(508);	//start address: 512
+	alarmStoppedByBtnStr = readStringFromEeprom(508);	//start address: 508
 	Serial.println("hardware-setting: alarm-sound " + alarmStoppedByBtnStr);
 
 	//try to connect to home-wlan
@@ -143,7 +143,7 @@ void setup() {
 	wlanMode = HOMEWLAN;
 	String ssidHomeWlanStr = readStringFromEeprom(0);	//start address: 0
 	ssidHomeWlanStr.toCharArray(ssidHomeWlan,ssidHomeWlanSize);
-	String passwordHomeWlanStr = readStringFromEeprom(254);	//start address: 256
+	String passwordHomeWlanStr = readStringFromEeprom(254);	//start address: 254
 	passwordHomeWlanStr.toCharArray(passwordHomeWlan,passwordHomeWlanSize);
 	Serial.print("connecting to ");
 	Serial.print(ssidHomeWlan);
@@ -347,17 +347,14 @@ void setCo2Alarm(int value) {
 	if(wlanMode == STANDALONEWLAN) {
 		currentEpochTime = (millis() / 1000) + 3601;
 		//check if alarm stopped by button over settings-page
-		Serial.println("STANDALONEWLAN");
 		if(alarmStoppedByBtnStr == "off") {
 			alarmStopped = true;
 			alarmsSetTime[0] = 0;
 			alarmsSetTime[1] = 0;
 			alarmsSetTime[2] = 0;
 			Serial.println("co2-alarm deactivated.");
-			Serial.println("alarmStoppedByBtnStr == off");
 		} else if(alarmStoppedByBtnStr == "on"){
 			alarmStopped = false;
-			Serial.println("alarmStoppedByBtnStr == on");
 		}
 	}
 
