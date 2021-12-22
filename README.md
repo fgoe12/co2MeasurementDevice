@@ -11,7 +11,6 @@ The measured co2 value should be easily communicated to everyone and a simple re
 # Components:
 <ul>
   <li>1x ESP8266 Node-MCU V3</li>
-  <li>1x ESP8266 Node-MCU V3</li>
   <li>1x LED red yellow</li>
   <li>2x resistor for the LED (ex. 68 ohm)</li>
   <li>1x MH-Z19B CO2-Sensor</li>
